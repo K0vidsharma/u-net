@@ -5,13 +5,13 @@ from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
 from model import UNET
-# from utils import (
-#     load_checkpoint,
-#     save_checkpoint,
-#     get_loaders,
-#     check_accuracy,
-#     save_predictions_as_imgs
-# )
+from utils import (
+    load_checkpoint,
+    save_checkpoint,
+    get_loaders,
+    check_accuracy,
+    save_predictions_as_imgs
+)
 
 
 # Hyper Parameters
@@ -93,7 +93,10 @@ def main():
         val_transforms
     )
 
-    scaler = torch.cuda.amp.GradScaler
+    scaler = torch.cuda.amp.GradScaler()
+    for epoch in range(NUM_EPOCHS):
+        train_fn(train_loader, model, optimizer, loss_fn, scaler)
+
 
 if __name__ == "__main__":
     main()
