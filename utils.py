@@ -62,7 +62,7 @@ def check_accuracy(loader, model, device):
 
     with torch.inference_mode():
         for x, y in loader:
-            x, y = x.to(device), y.to(device)
+            x, y = x.to(device), y.to(device).unsqueeze(1)
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float()
             num_correct += (preds == y).sum()
@@ -95,3 +95,5 @@ def save_predictions_as_imgs(
         torchvision.utils.save_image(
             y.unsqueeze(1), f"{folder}{idx}.png"
         )
+    model.train()
+

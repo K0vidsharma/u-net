@@ -96,6 +96,18 @@ def main():
     scaler = torch.cuda.amp.GradScaler()
     for epoch in range(NUM_EPOCHS):
         train_fn(train_loader, model, optimizer, loss_fn, scaler)
+        checkpoint = {
+            "state_dict": model.state_dict(),
+            "optimizer": optimizer.state_dict()
+        }
+        save_checkpoint(checkpoint)
+
+        check_accuracy(val_loader, model, device=DEVICE)
+
+        save_predictions_as_imgs(val_loader,
+                                 model,
+                                 folder="saved_images/",
+                                 device=DEVICE)
 
 
 if __name__ == "__main__":
