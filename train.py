@@ -35,7 +35,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
     for batch_idx, (data, targets) in enumerate(loop):
         data = data.to(device=DEVICE)
-        targets = targets.float().unsqueeze(1).to(device= DEVICE)
+        targets = targets.float().unsqueeze(1).to(device=DEVICE)
 
         # Forward
         with torch.cuda.amp.autocast():
@@ -93,6 +93,10 @@ def main():
         val_transforms
     )
 
+    if LOAD_MODEL:
+        load_checkpoint(torch.load("my_checkpoint.pth.tar"), model)
+
+    check_accuracy(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
     for epoch in range(NUM_EPOCHS):
         train_fn(train_loader, model, optimizer, loss_fn, scaler)
